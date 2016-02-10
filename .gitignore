@@ -33,3 +33,4 @@ local.properties
 # lib
 *.sh
 *.bat
+*Test.java
