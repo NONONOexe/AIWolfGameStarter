@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.aiwolf.common.data.Role;
 
+import jp.ac.maslab.ando.aiwolf.starter.io.ConfigFileReader;
+import jp.ac.maslab.ando.aiwolf.starter.io.PlayerFileReader;
 import jp.ac.maslab.ando.aiwolf.util.Pair;
 
 /**
@@ -29,7 +31,7 @@ public class Config {
 		this.configFileReader = new ConfigFileReader(argsProcessor.getConfigPath());
 		this.playerFileReader = new PlayerFileReader(configFileReader.getSettingMap().get(SettingItem.PLAYER_FILE));
 		this.numberOfPlayers = Integer.parseInt(configFileReader.getSettingMap().get(SettingItem.NUMBER_OF_PLAYERS));
-		this.playerRoleList = playerFileReader.getPlayerRoleList();
+		this.playerRoleList = playerFileReader.getPlayerClassNameRoleList();
 		this.numberOfGames = Integer.parseInt(configFileReader.getSettingMap().get(SettingItem.NUMBER_OF_GAMES));
 		this.logDirectory = configFileReader.getSettingMap().get(SettingItem.LOG_DIRECTORY);
 		this.defaultPlayer = configFileReader.getSettingMap().get(SettingItem.DEFAULT_PLAYER);

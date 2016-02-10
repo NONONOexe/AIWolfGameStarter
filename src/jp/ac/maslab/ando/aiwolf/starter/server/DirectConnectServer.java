@@ -1,4 +1,4 @@
-package jp.ac.maslab.ando.aiwolf.starter;
+package jp.ac.maslab.ando.aiwolf.starter.server;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -16,9 +16,6 @@ import org.aiwolf.server.net.GameServer;
 import jp.ac.maslab.ando.aiwolf.util.Pair;
 
 public class DirectConnectServer implements GameServer {
-	//private Map<Agent, Player> agentPlayerMap;
-	//private Map<Player, Agent> playerAgentMap;
-	//private Map<Agent, Role> requestRoleMap;
 	private Map<Agent, Pair<Player, Role>> agentPlayerMap;
 	private GameData gameData;
 	private GameSetting gameSetting;

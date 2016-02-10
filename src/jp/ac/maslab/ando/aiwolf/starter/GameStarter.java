@@ -13,6 +13,7 @@ import org.aiwolf.common.data.Role;
 import org.aiwolf.common.net.GameSetting;
 import org.aiwolf.server.AIWolfGame;
 
+import jp.ac.maslab.ando.aiwolf.starter.server.DirectConnectServer;
 import jp.ac.maslab.ando.aiwolf.util.Pair;
 
 /**

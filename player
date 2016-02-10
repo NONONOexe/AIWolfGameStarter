@@ -1,17 +1,18 @@
-# クラス名:役職
-# Sample
-jp.halfmoon.inaba.aiwolf.strategyplayer.StrategyPlayer:
-com.gmail.jinro.noppo.players.RoleAssignPlayer:
-org.aiwolf.Satsuki.LearningPlayer.AIWolfMain:
-jp.ac.shibaura_it.ma15082.WasabiRoleAssignPlayer:
-takata.player.TakataRoleAssignPlayer:
-ipa.myAgent.IPARoleAssignPlayer:
-org.aiwolf.iace10442.ChipRoleAssignPlayer:
-com.github.haretaro.pingwo.role.PingwoRoleAssignPlayer:
-com.yy.player.YYRoleAssignPlayer:
-kainoueAgent.MyRoleAssignPlayer:
-jp.ac.aitech.k13009kk.aiwolf.client.player.AndoRoleAssignPlayer:SEER
-com.gmail.the.seventh.layers.RoleAssignPlayer:
-jp.ac.cu.hiroshima.info.cm.nakamura.player.NoriRoleAssignPlayer:
-com.canvassoft.Agent.CanvasRoleAssignPlayer:
-com.gmail.octobersky.MyRoleAssignPlayer:
+# プレイヤーファイルです。
+# プレイヤーのクラス名:役職
+# Sample(第一回大会構成)
+# jp.halfmoon.inaba.aiwolf.strategyplayer.StrategyPlayer:
+# com.gmail.jinro.noppo.players.RoleAssignPlayer:
+# org.aiwolf.Satsuki.LearningPlayer.AIWolfMain:
+# jp.ac.shibaura_it.ma15082.WasabiRoleAssignPlayer:
+# takata.player.TakataRoleAssignPlayer:
+# ipa.myAgent.IPARoleAssignPlayer:
+# org.aiwolf.iace10442.ChipRoleAssignPlayer:
+# com.github.haretaro.pingwo.role.PingwoRoleAssignPlayer:
+# com.yy.player.YYRoleAssignPlayer:
+# kainoueAgent.MyRoleAssignPlayer:
+# jp.ac.aitech.k13009kk.aiwolf.client.player.AndoRoleAssignPlayer:
+# com.gmail.the.seventh.layers.RoleAssignPlayer:
+# jp.ac.cu.hiroshima.info.cm.nakamura.player.NoriRoleAssignPlayer:
+# com.canvassoft.Agent.CanvasRoleAssignPlayer:
+# com.gmail.octobersky.MyRoleAssignPlayer:
