@@ -35,3 +35,5 @@ local.properties
 *.bat
 *Test.java
 log/
+myconfig.cfg
+myplayer
