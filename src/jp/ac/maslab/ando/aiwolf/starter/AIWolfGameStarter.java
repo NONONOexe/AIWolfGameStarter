@@ -10,6 +10,10 @@ public class AIWolfGameStarter {
 
 		GameStarter gameStarter = new GameStarter(config);
 		GameRepeater gameRepeater = new GameRepeater(gameStarter, config.getNumberOfGames());
+		GameTotalizer gameTotalizer = new GameTotalizer();
+		gameRepeater.setGameTotalizer(gameTotalizer);
 		gameRepeater.repeat();
+		System.out.println();
+		gameTotalizer.printResult();
 	}
 }

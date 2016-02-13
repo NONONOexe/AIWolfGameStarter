@@ -26,6 +26,7 @@ public class GameStarter {
 	private int numberOfPlayers;
 	private List<Pair<String, Role>> playerRoleList;
 	private String logDirectory;
+	private DirectConnectServer gameServer;
 
 	/**
 	 * 新規スターターを構築します。
@@ -53,6 +54,7 @@ public class GameStarter {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String timeString =timestamp.toString().replaceAll("[\\s-/:.]", "");
 		File logFile = new File(String.format("%s/aiwolfGame%s.log", logDirectory, timeString));
+		this.gameServer = gameServer;
 		game.setLogFile(logFile);
 		game.setRand(new Random(gameSetting.getRandomSeed()));
 		game.start();
@@ -70,5 +72,13 @@ public class GameStarter {
 			roleMap.put((Player) Class.forName(defaultClassName).newInstance(), null);
 		}
 		return roleMap;
+	}
+
+	/**
+	 * ゲームサーバを返します。
+	 * @return ゲームサーバ
+	 */
+	public DirectConnectServer getGameServer() {
+		return gameServer;
 	}
 }

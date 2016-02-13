@@ -2,6 +2,8 @@ package jp.ac.maslab.ando.aiwolf.starter;
 
 import java.io.IOException;
 
+import org.aiwolf.server.AIWolfGame;
+
 /**
  * 繰り返し実行可能なゲームスターターです。
  * @author keisuke
@@ -9,6 +11,7 @@ import java.io.IOException;
 public class GameRepeater {
 	private GameStarter gameStarter;
 	private int numberOfGames = 1;
+	private GameTotalizer gameTotalizer;
 
 	/**
 	 * 新規リピーターを構築します。
@@ -31,7 +34,20 @@ public class GameRepeater {
 	public void repeat()
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
 		for (int i = 0; i < numberOfGames; i++) {
-			gameStarter.start();
+			AIWolfGame game = gameStarter.start();
+			if (gameTotalizer != null) {
+				gameTotalizer.setGame(game);
+				gameTotalizer.setGameServer(gameStarter.getGameServer());
+				gameTotalizer.tally();
+			}
 		}
+	}
+
+	/**
+	 * {@code GameTotalizer}を設定します。
+	 * @param gameTotalizer 勝敗などを集計するためのオブジェクト
+	 */
+	public void setGameTotalizer(GameTotalizer gameTotalizer) {
+		this.gameTotalizer = gameTotalizer;
 	}
 }
