@@ -1,17 +1,16 @@
 package jp.ac.maslab.ando.aiwolf.starter;
 
 /**
- * AIWolfGameSterter実行時のオプション名の列挙です。
+ * オプションの列挙です。
  * @author keisuke
- *
  */
 public enum Option {
 	/**
-	 * コンフィグファイルを設定するオプションです。
+	 * 構成ファイル(Config File)を指定するオプションです。
 	 */
-	CONFIG_FILE("-C"),
+	CONFIG_FILE_PATH("-C"),
 	/**
-	 * バージョン名を表示するオプションです。
+	 * バージョンを表示するオプションです。
 	 */
 	VERSION("--version"),
 	/**
@@ -19,30 +18,29 @@ public enum Option {
 	 */
 	HELP("--help");
 
+	/**
+	 * コマンドラインに入力する文字列を示します。
+	 */
 	private String command;
 
+	/**
+	 * 新規オプションを作成します。
+	 * @param command コマンドラインに入力する文字列
+	 */
 	private Option(String command) {
 		this.command = command;
 	}
 
 	/**
-	 * このOptionのコマンド文字列を返します。
-	 * @return オプションのコマンド文字列
-	 */
-	public String getCommand() {
-		return command;
-	}
-
-	/**
-	 * 指定されたコマンド文字列のOptionを返します。指定されたコマンドのオプションが存在しない場合はnullを返します。
-	 * @param command コマンド文字列
-	 * @return コマンド文字列のOption
+	 * 指定された文字列のコマンドに対応する{@code Option}を返します。
+	 * @param command コマンドラインに入力する文字列
+	 * @return {@code command}に対応する{@code Option}
 	 */
 	public static Option parseOption(String command) {
 		Option option = null;
-		for (Option value : Option.values()) {
-			if (value.getCommand().equals(command)) {
-				option = value;
+		for (Option item : Option.values()) {
+			if (item.command.equals(command)) {
+				option = item;
 				break;
 			}
 		}

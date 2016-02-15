@@ -8,20 +8,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aiwolf.common.data.Role;
+import jp.ac.maslab.ando.aiwolf.starter.PlayerEntry;
 
-import jp.ac.maslab.ando.aiwolf.util.Pair;
-
-/*
- * 2016/02/10 変数名の変更、JavaDocの追加、ファイルのエントリを正規表現で認識（改行を無視できるようになった）
- */
 /**
  * プレイヤーファイルを読み込みます。
  * @author keisuke
  */
 public class PlayerFileReader {
+	/**
+	 * プレイヤーファイルのパス名文字列を示します。
+	 */
 	private String pathname;
-	private List<Pair<String, Role>> playerClassNameRoleList;
+	/**
+	 * プレイヤーファイルから読みこんだ{@code PlayerEntry}のリストを示します。
+	 */
+	private List<PlayerEntry> playerEntryList;
 	/**
 	 * コメントの始まりを表すシンボルです。
 	 */
@@ -33,15 +34,11 @@ public class PlayerFileReader {
 	/**
 	 * プレイヤークラス名のフィールド番号です。
 	 */
-	public static final int PLAYERCLASSNAME = 0;
+	public static final int PLAYER_CLASS_NAME = 0;
 	/**
 	 * 役職のフィールド番号です。
 	 */
-	public static final int ROLE = 1;
-	/**
-	 * フィールドの数です。
-	 */
-	public static final int FIELD_NUM = 2;
+	public static final int SUGGESTED_ROLE = 1;
 
 	/**
 	 * 指定されたパスのプレイヤーファイルを読み込むリーダを作成します。
@@ -49,22 +46,22 @@ public class PlayerFileReader {
 	 */
 	public PlayerFileReader(String pathname) {
 		this.pathname = pathname;
-		this.playerClassNameRoleList = createPlayerClassNameRoleList();
+		this.playerEntryList = createPlayerEntryList();
 	}
 
 	/**
-	 * プレイヤークラス名と役職のペアのリストを作成します。
-	 * @return プレイヤークラス名と役職のペアのリスト
+	 * プレイヤーファイルから{@code PlayerEntry}のリストを作成します。
+	 * @return {@code PlayerEntry}のリスト
 	 */
-	private List<Pair<String, Role>> createPlayerClassNameRoleList() {
-		List<Pair<String, Role>> playerClassNameRoleList = new ArrayList<>();
+	private List<PlayerEntry> createPlayerEntryList() {
+		List<PlayerEntry> playerEntryList = new ArrayList<>();
 		File playerFile = new File(pathname);
 		try (BufferedReader br = new BufferedReader(new FileReader(playerFile))) {
 			String line = null;
 			while ((line = br.readLine()) != null) {
 				if (!line.startsWith(COMMENT) && line.matches("..*:.*")) {
-					Pair<String, Role> playerClassNameRolePair = toPlayerClassNameRolePair(line);
-					playerClassNameRoleList.add(playerClassNameRolePair);
+					PlayerEntry playerEntry = convertPlayerEntry(line);
+					playerEntryList.add(playerEntry);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -72,33 +69,28 @@ public class PlayerFileReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return playerClassNameRoleList;
+		return playerEntryList;
 	}
 
 	/**
-	 * 指定された文字列をプレイヤークラス名と役職のペアにして返します。
-	 * @param str 読み込む文字列
-	 * @return プレイヤークラス名と役職のペア
+	 * 指定された文字列を{@code PlayerEntry}に変換します。
+	 * @param string 文字列
+	 * @return 変換した{@code PlayerEntry}
 	 */
-	private Pair<String, Role> toPlayerClassNameRolePair(String str) {
-		Pair<String, Role> playerClassNameRolePair;
-		String playerClassName = str.split(REGEX)[PLAYERCLASSNAME];
-		Role role;
-		if (str.split(REGEX).length < FIELD_NUM) {
-			role = null;
-		} else {
-			role = Role.valueOf(str.split(REGEX)[ROLE].toUpperCase());
+	private PlayerEntry convertPlayerEntry(String string) {
+		String playerClassName = string.split(REGEX)[PLAYER_CLASS_NAME];
+		String suggestedRole = null;
+		if (SUGGESTED_ROLE < string.split(REGEX).length) {
+			suggestedRole = string.split(REGEX)[SUGGESTED_ROLE];
 		}
-		playerClassNameRolePair = new Pair<String, Role>(playerClassName, role);
-		return playerClassNameRolePair;
+		return new PlayerEntry(playerClassName, suggestedRole);
 	}
 
 	/**
-	 * プレイヤークラス名に役職を関連付けた{@code Pair<String,Role>}のリストを返します。<br>
-	 * 役職が指定されていない場合はnullが関連付けられます。
-	 * @return プレイヤークラス名に役職を関連付けた{@code Pair<String,Role>}のリスト
+	 * プレイヤーファイルから読みこんだ{@code PlayerEntry}のリストを返します。
+	 * @return プレイヤーファイルから読みこんだ{@code PlayerEntry}のリスト
 	 */
-	public List<Pair<String, Role>> getPlayerClassNameRoleList() {
-		return playerClassNameRoleList;
+	public List<PlayerEntry> getPlayerEntryList() {
+		return playerEntryList;
 	}
 }

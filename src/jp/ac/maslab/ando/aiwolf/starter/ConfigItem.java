@@ -1,10 +1,10 @@
 package jp.ac.maslab.ando.aiwolf.starter;
 
 /**
- * 設定項目です。
+ * 設定ファイルの項目です。
  * @author keisuke
  */
-public enum SettingItem {
+public enum ConfigItem {
 	/**
 	 * プレイヤーの人数を示します。
 	 */
@@ -12,17 +12,17 @@ public enum SettingItem {
 	/**
 	 * プレイヤーファイルのパスを示します。
 	 */
-	PLAYER_FILE,
+	PLAYER_FILE_PATH,
 	/**
 	 * デフォルトのプレイヤークラスを示します。
 	 */
-	DEFAULT_PLAYER,
+	DEFAULT_PLAYER_CLASS_NAME,
 	/**
 	 * 繰り返すゲームの数を示します。
 	 */
 	NUMBER_OF_GAMES,
 	/**
-	 * ログの保存先を示します。
+	 * ログの保存先のディレクトリパスを示します。
 	 */
-	LOG_DIRECTORY;
+	LOG_DIRECTORY_PATH;
 }

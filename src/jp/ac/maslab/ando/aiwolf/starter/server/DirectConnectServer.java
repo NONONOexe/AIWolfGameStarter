@@ -1,10 +1,10 @@
 package jp.ac.maslab.ando.aiwolf.starter.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.aiwolf.common.data.Agent;
 import org.aiwolf.common.data.Player;
@@ -13,20 +13,25 @@ import org.aiwolf.common.net.GameSetting;
 import org.aiwolf.server.GameData;
 import org.aiwolf.server.net.GameServer;
 
-import jp.ac.maslab.ando.aiwolf.util.Pair;
-
 public class DirectConnectServer implements GameServer {
-	private Map<Agent, Pair<Player, Role>> agentPlayerMap;
+	private Map<Agent, Player> agentPlayerMap;
+	private Map<Player, Agent> playerAgentMap;
+	private Map<Agent, Role> agentRequestRoleMap;
 	private GameData gameData;
 	private GameSetting gameSetting;
 
-	public DirectConnectServer(Map<Player, Role> playerMap) {
+	public DirectConnectServer(Map<Player, Role> playerRoleMap) {
 		agentPlayerMap = new LinkedHashMap<>();
+		playerAgentMap = new LinkedHashMap<>();
+		agentRequestRoleMap = new HashMap<>();
+
 		int idx = 1;
-		for (Player player : playerMap.keySet()) {
+		for (Player player : playerRoleMap.keySet()) {
 			Agent agent = Agent.getAgent(idx);
+			agentPlayerMap.put(agent, player);
+			playerAgentMap.put(player, agent);
+			agentRequestRoleMap.put(agent, playerRoleMap.get(player));
 			idx++;
-			agentPlayerMap.put(agent, new Pair<Player, Role>(player, playerMap.get(player)));
 		}
 	}
 
@@ -47,91 +52,80 @@ public class DirectConnectServer implements GameServer {
 
 	@Override
 	public void init(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.initialize(gameData.getGameInfo(agent), gameSetting.clone());
+		agentPlayerMap.get(agent).initialize(gameData.getGameInfo(agent), gameSetting.clone());
 	}
 
 	@Override
 	public String requestName(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		String name = player.getName();
+		String name = agentPlayerMap.get(agent).getName();
 		if (name == null) {
-			name = player.getClass().getSimpleName();
+			name = agentPlayerMap.get(agent).getClass().getSimpleName();
 		}
 		return name;
 	}
 
 	@Override
 	public Role requestRequestRole(Agent agent) {
-		return agentPlayerMap.get(agent).getValue();
+		return agentRequestRoleMap.get(agent);
 	}
 
 	@Override
 	public void dayStart(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		player.dayStart();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		agentPlayerMap.get(agent).dayStart();
 	}
 
 	@Override
 	public void dayFinish(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
 	}
 
 	@Override
 	public String requestTalk(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		String talk = player.talk();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		String talk = agentPlayerMap.get(agent).talk();
 		return talk;
 	}
 
 	@Override
 	public String requestWhisper(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		String whisper = player.whisper();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		String whisper = agentPlayerMap.get(agent).whisper();
 		return whisper;
 	}
 
 	@Override
 	public Agent requestVote(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		Agent target = player.vote();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		Agent target = agentPlayerMap.get(agent).vote();
 		return target;
 	}
 
 	@Override
 	public Agent requestDivineTarget(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		Agent target = player.divine();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		Agent target = agentPlayerMap.get(agent).divine();
 		return target;
 	}
 
 	@Override
 	public Agent requestGuardTarget(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		Agent target = player.guard();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		Agent target = agentPlayerMap.get(agent).guard();
 		return target;
 	}
 
 	@Override
 	public Agent requestAttackTarget(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getGameInfo(agent));
-		Agent target = player.attack();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		Agent target = agentPlayerMap.get(agent).attack();
 		return target;
 	}
 
 	@Override
 	public void finish(Agent agent) {
-		Player player = agentPlayerMap.get(agent).getKey();
-		player.update(gameData.getFinalGameInfo(agent));
-		player.finish();
+		agentPlayerMap.get(agent).update(gameData.getGameInfo(agent));
+		agentPlayerMap.get(agent).finish();
 	}
 
 	@Override
@@ -144,13 +138,15 @@ public class DirectConnectServer implements GameServer {
 	 * @return 指定されたプレイヤーに対応するエージェント
 	 */
 	public Agent getAgent(Player player) {
-		Agent agent = null;
-		for (Entry<Agent, Pair<Player, Role>> entry : agentPlayerMap.entrySet()) {
-			if (player.equals(entry.getValue().getKey())) {
-				agent = entry.getKey();
-				break;
-			}
-		}
-		return agent;
+		return playerAgentMap.get(player);
+	}
+
+	/**
+	 * 指定されたエージェントに対応するプレイヤーを返します。
+	 * @param agent エージェント
+	 * @return 指定されたエージェントに対応するプレイヤー
+	 */
+	public Player getPlayer(Agent agent) {
+		return agentPlayerMap.get(agent);
 	}
 }

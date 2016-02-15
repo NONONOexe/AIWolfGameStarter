@@ -3,6 +3,8 @@ package jp.ac.maslab.ando.aiwolf.starter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.aiwolf.common.data.Player;
+
 /**
  * 大会に参加したエージェントのチーム名を保持しているクラスです。
  * @author keisuke
@@ -31,7 +33,7 @@ public class CompetitionAgentName {
 		teamNameMap.put("com.gmail.jinro.noppo.players.RoleAssignPlayer", "働きの悪い村");
 		teamNameMap.put("org.aiwolf.Satsuki.LearningPlayer.AIWolfMain", "Satsuki");
 		teamNameMap.put("jp.ac.shibaura_it.ma15082.WasabiRoleAssignPlayer", "wasabi");
-		teamNameMap.put(	"takata.player.TakataRoleAssignPlayer", "GofukuLab");
+		teamNameMap.put("takata.player.TakataRoleAssignPlayer", "GofukuLab");
 		teamNameMap.put("ipa.myAgent.IPARoleAssignPlayer", "IPA");
 		teamNameMap.put("org.aiwolf.iace10442.ChipRoleAssignPlayer", "iace10442");
 		teamNameMap.put("com.github.haretaro.pingwo.role.PingwoRoleAssignPlayer", "平兀");
@@ -51,7 +53,8 @@ public class CompetitionAgentName {
 	}
 
 	/**
-	 * 指定されたクラスパスが第１回人狼知能大会＠CEDEC2015のエージェントのものであれば、そのチーム名を返します。そうでない場合はnullを返します。
+	 * 指定されたクラスパスが第１回人狼知能大会＠CEDEC2015のエージェントのものであれば、そのチーム名を返します。
+	 * そうでない場合はnullを返します。
 	 * @param classPath クラスパス
 	 * @return 指定されたクラスパスが登録されたチーム名。登録されていない場合はnull
 	 */
@@ -60,5 +63,24 @@ public class CompetitionAgentName {
 			initializeClassPathTeamNameMap();
 		}
 		return teamNameMap.get(classPath);
+	}
+
+	/**
+	 * 指定されたプレイヤーの名前を返します。第１回人狼知能大会＠CEDEC2015のエージェントを指定している場合は、そのチーム名を返します。
+	 * プレイヤーに名前が設定されていない場合はプレイヤーのクラス名を返します。
+	 * @param player プレイヤー
+	 * @return プレイヤーの名前
+	 */
+	public static String getPlayerName(Player player) {
+		CompetitionAgentName competitionAgentName = CompetitionAgentName.getInstance();
+		String competitionName = competitionAgentName.getTeamName(player.getClass().getName());
+		if (competitionName != null) {
+			return competitionName;
+		}
+		String playerName = player.getName();
+		if (playerName != null) {
+			return playerName;
+		}
+		return player.getClass().getSimpleName();
 	}
 }
