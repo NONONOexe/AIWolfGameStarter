@@ -25,7 +25,6 @@ public class RepeatStarter {
 	 * スターターの設定を示します。
 	 */
 	private StarterSetting starterSetting;
-	private List<GameResult> gameResultList;
 
 	/**
 	 * 指定された設定で新しくスターターを構築します。
@@ -33,7 +32,6 @@ public class RepeatStarter {
 	 */
 	public RepeatStarter(StarterSetting setting) {
 		this.starterSetting = setting;
-		this.gameResultList = new ArrayList<>();
 	}
 
 	/**
@@ -44,6 +42,7 @@ public class RepeatStarter {
 	 * @throws IOException ログファイルの書き込みに失敗したときにスローされます。
 	 */
 	public void start() throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
+		List<GameResult> gameResultList = new ArrayList<>();
 		for (int i = 0; i < starterSetting.getNumberOfgames(); i++) {
 			DirectConnectServer gameServer = new DirectConnectServer(createPlayerRoleMap());
 			GameSetting gameSetting = GameSetting.getDefaultGame(starterSetting.getNumberOfplayers());
@@ -57,29 +56,8 @@ public class RepeatStarter {
 			game.start();
 			gameResultList.add(new GameResult(gameServer, game));
 		}
-		printTotalGameResult();
-	}
-
-	/**
-	 * 全ゲームの結果を標準出力に出力します。
-	 */
-	private void printTotalGameResult() {
-		Map<String, Integer> agentWinCount = new HashMap<>();
-		for (GameResult gameResult : gameResultList) {
-			if (agentWinCount.isEmpty()) {
-				for (String playerName : gameResult.getResultMap().keySet()) {
-					agentWinCount.put(playerName, 0);
-				}
-			}
-			gameResult.getResultMap().forEach((playerName, result) -> {
-				if (result.getWinOrLoss().equals(WinOrLoss.WIN)) {
-					agentWinCount.put(playerName, agentWinCount.get(playerName) + 1);
-				}
-			});
-		}
-		agentWinCount.forEach((playerName, winCount) -> {
-			System.out.println(playerName + " : " + winCount);
-		});
+		TotalGameAggregate totalGameAggregate = new TotalGameAggregate(gameResultList);
+		totalGameAggregate.printResult();
 	}
 
 	/**

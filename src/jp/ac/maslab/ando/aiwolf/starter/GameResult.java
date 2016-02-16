@@ -1,28 +1,31 @@
 package jp.ac.maslab.ando.aiwolf.starter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.aiwolf.common.data.Agent;
 import org.aiwolf.common.data.Role;
+import org.aiwolf.common.data.Status;
 import org.aiwolf.common.data.Team;
 import org.aiwolf.server.AIWolfGame;
 
 import jp.ac.maslab.ando.aiwolf.starter.server.DirectConnectServer;
 
 /**
- * 対戦結果を保持するクラスです。
+ * ゲーム結果を保持するクラスです。
  * @author keisuke
  */
 public class GameResult {
 	/**
 	 * 勝利チームを示します。
 	 */
-	private Team winner;
+	private Team winningTeam;
 	/**
 	 * プレイヤー名にそのプレイヤーの対戦結果を関連付けたマップです。
 	 */
-	private Map<String, AgentResult> resultMap;
+	private Map<String, PlayerGameResult> playerResultMap;
 
 	/**
 	 * 指定されたゲームサーバと人狼ゲームから新しく対戦結果を構築します。
@@ -30,14 +33,15 @@ public class GameResult {
 	 * @param game 人狼ゲーム
 	 */
 	public GameResult(DirectConnectServer gameServer, AIWolfGame game) {
-		this.winner = game.getWinner();
-		this.resultMap = new HashMap<>();
+		this.winningTeam = game.getWinner();
+		this.playerResultMap = new HashMap<>();
 		for (Agent agent : game.getGameData().getAgentList()) {
 			String playerName = CompetitionAgentName.getPlayerName(gameServer.getPlayer(agent));
 			Role role = game.getGameData().getRole(agent);
-			WinOrLoss winOrLoss = (game.getWinner().equals(role.getTeam())) ? WinOrLoss.WIN : WinOrLoss.LOSE;
-			AgentResult playerResult = new AgentResult(agent, role, winOrLoss);
-			resultMap.put(playerName, playerResult);
+			WinOrLoss winOrLoss = game.getWinner().equals(role.getTeam()) ? WinOrLoss.WIN : WinOrLoss.LOSING;
+			Status status = game.getGameData().getStatus(agent);
+			PlayerGameResult playerResult = new PlayerGameResult(agent, role, winOrLoss, status);
+			playerResultMap.put(playerName, playerResult);
 		}
 	}
 
@@ -45,15 +49,24 @@ public class GameResult {
 	 * 勝利チームを返します。
 	 * @return 勝利チーム
 	 */
-	public Team getWinner() {
-		return winner;
+	public Team getWinningTeam() {
+		return winningTeam;
 	}
 
 	/**
-	 * プレイヤー名にそのプレイヤーの対戦結果を関連付けたマップを返します。
-	 * @return プレイヤー名にそのプレイヤーの対戦結果を関連付けたマップ
+	 * プレイヤー名のリストを返します。
+	 * @return プレイヤー名のリスト
 	 */
-	public Map<String, AgentResult> getResultMap() {
-		return resultMap;
+	public List<String> getPlayerNameList() {
+		return new ArrayList<>(playerResultMap.keySet());
+	}
+
+	/**
+	 * 指定されたプレイヤーの対戦結果を返します。
+	 * @param playerName プレイヤーの名前
+	 * @return 指定されたプレイヤーの対戦結果
+	 */
+	public PlayerGameResult getPlayerGameResult(String playerName) {
+		return playerResultMap.get(playerName);
 	}
 }

@@ -18,8 +18,8 @@ public class CompetitionAgentName {
 	}
 
 	/**
-	 * CompetitionAgentNameのインスタンスを返します。
-	 * @return CompetitionAgentNameのインスタンス
+	 * {@code CompetitionAgentName}のインスタンスを返します。
+	 * @return {@code CompetitionAgentName}のインスタンス
 	 */
 	public static synchronized CompetitionAgentName getInstance() {
 		return CompetionAgentNameHolder.instance;

@@ -12,5 +12,5 @@ public enum WinOrLoss {
 	/**
 	 * 敗北を示します。
 	 */
-	LOSE
+	LOSING
 }
