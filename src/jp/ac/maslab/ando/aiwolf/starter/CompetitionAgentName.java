@@ -26,6 +26,7 @@ public class CompetitionAgentName {
 	}
 
 	private Map<String, String> teamNameMap;
+	private Map<String, String> aliasMap;
 
 	private void initializeClassPathTeamNameMap() {
 		teamNameMap = new HashMap<>();
@@ -82,5 +83,29 @@ public class CompetitionAgentName {
 			return playerName;
 		}
 		return player.getClass().getSimpleName();
+	}
+
+	/**
+	 * プレイヤー名が大会チームのもので、全角が含まれている場合にその名前がわかるようなアルファベット文字列を返します。
+	 * @param playerName プレイヤー名
+	 * @return プレイヤー名に対応するアルファベット文字列
+	 */
+	public String getAlias(String playerName) {
+		if (aliasMap == null) {
+			initializeAliasMap();
+		}
+		return aliasMap.get(playerName);
+	}
+
+	private void initializeAliasMap() {
+		aliasMap = new HashMap<>();
+		aliasMap.put("饂飩", "UDON");
+		aliasMap.put("働きの悪い村", "HATARAKI");
+		aliasMap.put("平兀", "PINGWO");
+		aliasMap.put("Y・Y", "YY");
+		aliasMap.put("中村人", "NAKAMURABITO");
+		aliasMap.put("昼休みはいつも人狼でつぶれる", "HIRUYASUMI");
+		aliasMap.put("まえかわ", "MAEKAWA");
+		aliasMap.put("——————–", "aaaa");
 	}
 }

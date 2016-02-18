@@ -3,8 +3,7 @@ package jp.ac.maslab.ando.aiwolf.starter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.aiwolf.common.data.Role;
+import java.util.TreeMap;
 
 /**
  * 全ゲームの結果を集計するクラスです。
@@ -40,16 +39,38 @@ public class TotalGameAggregate {
 				playerTotalGameResult.addTotalGameResult(playerGameResult);
 			}
 		}
+		Map<String, Double> winningPercentageMap = new TreeMap<>();
+		for (String playerName : playerTotalGameResultMap.keySet()) {
+			playerTotalGameResultMap.get(playerName).setPlayerName(playerName);
+			winningPercentageMap.put(playerName, playerTotalGameResultMap.get(playerName).getWinningPercentage());
+		}
+		for (String playerName : playerTotalGameResultMap.keySet()) {
+			playerTotalGameResultMap.get(playerName).setOrder(getOrder(playerName, winningPercentageMap));
+		}
 	}
 
-	// TODO
-	public void printResult() {
-		for (String playerName : playerTotalGameResultMap.keySet()) {
-			PlayerTotalGameResult playerTotalGameResult = playerTotalGameResultMap.get(playerName);
-			System.out.println(playerName);
-			for (Role role : Role.values()) {
-				System.out.println(role + ":" + playerTotalGameResult.getWinningPercentage(role));
+	/**
+	 * 勝率のマップから指定されたプレイヤーが何位かを返します。
+	 * @param ownName プレイヤー名
+	 * @param winningPercentageMap 勝率マップ
+	 * @return プレイヤーの順位
+	 */
+	private int getOrder(String ownName, Map<String, Double> winningPercentageMap) {
+		int order = 0;
+		double ownPercentage = winningPercentageMap.get(ownName);
+		for (String playerName : winningPercentageMap.keySet()) {
+			if (ownPercentage <= winningPercentageMap.get(playerName)) {
+				order++;
 			}
 		}
+		return order;
+	}
+
+	/**
+	 * プレイヤー名に各プレイヤーの全ゲームの結果を関連付けたマップを返します。
+	 * @return プレイヤー名に各プレイヤーの全ゲームの結果を関連付けたマップ
+	 */
+	public Map<String, PlayerTotalGameResult> getPlayerTotalGameResultMap() {
+		return playerTotalGameResultMap;
 	}
 }

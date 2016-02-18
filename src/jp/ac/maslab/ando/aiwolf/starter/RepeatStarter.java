@@ -57,7 +57,9 @@ public class RepeatStarter {
 			gameResultList.add(new GameResult(gameServer, game));
 		}
 		TotalGameAggregate totalGameAggregate = new TotalGameAggregate(gameResultList);
-		totalGameAggregate.printResult();
+		ResultPrinter resultPrinter = new ResultPrinter(
+				totalGameAggregate.getPlayerTotalGameResultMap());
+		resultPrinter.showConsole();
 	}
 
 	/**
