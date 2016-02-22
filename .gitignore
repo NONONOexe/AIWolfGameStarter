@@ -10,6 +10,6 @@ log/
 *Test.java
 myconfig.cfg
 myplayer
-!AIWolfStarter.sh
-!AIWolfStarter.bat
+!AIWolfGameStarter.sh
+!AIWolfGameStarter.bat
 !lib/aiwolf-starter.jar
