@@ -26,7 +26,7 @@ public class TotalGameAggregate {
 
 	/**
 	 * 指定されたゲームの結果のリストを集計します。
-	 * @param gameResultList
+	 * @param gameResultList ゲームの結果
 	 */
 	private void tally(List<GameResult> gameResultList) {
 		for (GameResult gameResult : gameResultList) {

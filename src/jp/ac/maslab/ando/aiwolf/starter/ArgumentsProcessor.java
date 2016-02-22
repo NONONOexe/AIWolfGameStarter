@@ -52,7 +52,9 @@ public class ArgumentsProcessor {
 				optionArgument = argument;
 			}
 		}
-		blockList.add(new Block(option, optionArgument));
+		if (option != null) {
+			blockList.add(new Block(option, optionArgument));
+		}
 		return blockList;
 	}
 
@@ -123,8 +125,8 @@ public class ArgumentsProcessor {
 	 */
 	public void checkVersion() {
 		if (contains(Option.VERSION)) {
-			final String massage = "AIWolfStarter ver.0.1.2 spaghetti\n"
-					+ "Roleover Date:2016/02/14\n"
+			final String massage = "AIWolfStarter ver.0.1.3 spaghetti\n"
+					+ "Roleover Date:2016/02/20\n"
 					+ "Keisuke Ando";
 			System.out.println(massage);
 			System.exit(0);

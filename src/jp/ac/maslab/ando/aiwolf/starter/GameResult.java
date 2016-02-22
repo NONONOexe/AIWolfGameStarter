@@ -35,8 +35,20 @@ public class GameResult {
 	public GameResult(DirectConnectServer gameServer, AIWolfGame game) {
 		this.winningTeam = game.getWinner();
 		this.playerResultMap = new HashMap<>();
+		Map<String, Integer> nameIdxMap = new HashMap<>();
 		for (Agent agent : game.getGameData().getAgentList()) {
 			String playerName = CompetitionAgentName.getPlayerName(gameServer.getPlayer(agent));
+			if (playerResultMap.containsKey(playerName)) {
+				if (nameIdxMap.containsKey(playerName)) {
+					String newName = playerName + "(" + nameIdxMap.get(playerName) + ")";
+					nameIdxMap.put(playerName, nameIdxMap.get(playerName) + 1);
+					playerName = newName;
+				} else {
+					String newName = playerName + "(" + 2 + ")";
+					nameIdxMap.put(playerName, 2);
+					playerName = newName;
+				}
+			}
 			Role role = game.getGameData().getRole(agent);
 			WinOrLoss winOrLoss = game.getWinner().equals(role.getTeam()) ? WinOrLoss.WIN : WinOrLoss.LOSING;
 			Status status = game.getGameData().getStatus(agent);

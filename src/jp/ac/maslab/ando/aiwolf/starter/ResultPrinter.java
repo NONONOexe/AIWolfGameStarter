@@ -24,18 +24,8 @@ public class ResultPrinter {
 	 * コンソールでゲームの結果を表示します。
 	 */
 	public void showConsole() {
-		System.out.printf("%-20s %-6s %-135s\n", "Player Name", "Order",
-				"Winning Percentage(Winning Times/LosingTimes)");
-		System.out.printf("%27s %-95s %-31s %-15s\n",
-				"", "ROLE", "TEAM", "TOTAL");
-		System.out.printf("%27s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
-				"", "bodyguard", "medium", "possessed", "seer", "villager", "werewolf", "VILLAGER", "WEREWOLF");
 		for (String playerName : playerTotalGameResultMap.keySet()) {
 			PlayerTotalGameResult result = playerTotalGameResultMap.get(playerName);
-			CompetitionAgentName name = CompetitionAgentName.getInstance();
-			if (name.getAlias(playerName) != null) {
-				playerName = name.getAlias(playerName);
-			}
 			int order = result.getOrder();
 			String bodyguard = createWinningPercentageString(result, Role.BODYGUARD);
 			String medium = createWinningPercentageString(result, Role.MEDIUM);
@@ -46,10 +36,25 @@ public class ResultPrinter {
 			String villagerTeam = createWinningPercentageString(result, Team.VILLAGER);
 			String werewolfTeam = createWinningPercentageString(result, Team.WEREWOLF);
 			String total = createWinningPercentageString(result);
-			System.out.printf("%-20s %-6s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
-					playerName, order,
-					bodyguard, medium, possessed, seer, villager, werewolf,
-					villagerTeam, werewolfTeam, total);
+			System.out.println("=============================================");
+			System.out.println(playerName);
+			System.out.println("順位: " + order + "位");
+			System.out.println("---------------------------------------------");
+			System.out.println("役職: 勝率(勝利回数/敗北回数)");
+			System.out.println("---------------------------------------------");
+			System.out.println("狩人: " + bodyguard);
+			System.out.println("霊能: " + medium);
+			System.out.println("占い: " + seer);
+			System.out.println("村人: " + villager);
+			System.out.println("---------------------------------------------");
+			System.out.println("村人陣営: " + villagerTeam);
+			System.out.println("---------------------------------------------");
+			System.out.println("狂人: " + possessed);
+			System.out.println("人狼: " + werewolf);
+			System.out.println("---------------------------------------------");
+			System.out.println("人狼陣営: " + werewolfTeam);
+			System.out.println("---------------------------------------------");
+			System.out.println("全体: " + total);
 		}
 	}
 
@@ -60,10 +65,15 @@ public class ResultPrinter {
 	 * @return "勝率(勝利回数/敗北回数)"の文字列
 	 */
 	private String createWinningPercentageString(PlayerTotalGameResult result, Role role) {
-		double winPercentage = new BigDecimal(result.getWinningPercentage(role)).setScale(2, BigDecimal.ROUND_HALF_UP)
-				.doubleValue();
-		return String.format("%s(%s/%s)", winPercentage,
-				result.getWinningTimes(role), result.getLosingTimes(role));
+		try {
+			double winPercentage = new BigDecimal(result.getWinningPercentage(role))
+					.setScale(2, BigDecimal.ROUND_HALF_UP)
+					.doubleValue();
+			return String.format("%s(%s/%s)", winPercentage,
+					result.getWinningTimes(role), result.getLosingTimes(role));
+		} catch (NumberFormatException e) {
+			return String.format("%s(%s/%s)", " - ", result.getWinningTimes(role), result.getLosingTimes(role));
+		}
 	}
 
 	/**
@@ -73,10 +83,15 @@ public class ResultPrinter {
 	 * @return "勝率(勝利回数/敗北回数)"の文字列
 	 */
 	private String createWinningPercentageString(PlayerTotalGameResult result, Team team) {
-		double winPercentage = new BigDecimal(result.getWinningPercentage(team)).setScale(2, BigDecimal.ROUND_HALF_UP)
-				.doubleValue();
-		return String.format("%s(%s/%s)", winPercentage,
-				result.getWinningTimes(team), result.getLosingTimes(team));
+		try {
+			double winPercentage = new BigDecimal(result.getWinningPercentage(team))
+					.setScale(2, BigDecimal.ROUND_HALF_UP)
+					.doubleValue();
+			return String.format("%s(%s/%s)", winPercentage,
+					result.getWinningTimes(team), result.getLosingTimes(team));
+		} catch (NumberFormatException e) {
+			return String.format("%s(%s/%s)", " - ", result.getWinningTimes(team), result.getLosingTimes(team));
+		}
 	}
 
 	/**
@@ -85,9 +100,13 @@ public class ResultPrinter {
 	 * @return "勝率(勝利回数/敗北回数)"の文字列
 	 */
 	private String createWinningPercentageString(PlayerTotalGameResult result) {
-		double winPercentage = new BigDecimal(result.getWinningPercentage()).setScale(2, BigDecimal.ROUND_HALF_UP)
-				.doubleValue();
-		return String.format("%s(%s/%s)", winPercentage,
-				result.getWinningTimes(), result.getLosingTimes());
+		try {
+			double winPercentage = new BigDecimal(result.getWinningPercentage()).setScale(2, BigDecimal.ROUND_HALF_UP)
+					.doubleValue();
+			return String.format("%s(%s/%s)", winPercentage,
+					result.getWinningTimes(), result.getLosingTimes());
+		} catch (NumberFormatException e) {
+			return String.format("%s(%s/%s)", " - ", result.getWinningTimes(), result.getLosingTimes());
+		}
 	}
 }

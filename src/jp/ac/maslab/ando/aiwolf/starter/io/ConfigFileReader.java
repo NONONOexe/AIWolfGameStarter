@@ -66,7 +66,8 @@ public class ConfigFileReader {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.err.println("default.cfgが見つかりません。このプログラムと同じ階層にdefault.cfgを置いてください。");
+			System.exit(0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
