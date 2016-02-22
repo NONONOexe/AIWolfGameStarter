@@ -6,8 +6,7 @@ bin/
 jar/
 tmp/
 log/
-agent/
-lib/
+*.jar
 *.class
 *.sh
 *.bat
