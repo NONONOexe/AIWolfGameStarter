@@ -1,40 +1,18 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-*.pydevproject
+.classpath
 .metadata
-.gradle
+.settings/
+.project
 bin/
 tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-
-# Eclipse Core
-.project
-
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-
-# lib
+log/
+agent/
+lib/
+*.class
 *.sh
 *.bat
 *Test.java
-log/
 myconfig.cfg
 myplayer
-agent/
-lib/
+!AIWolfStarter.sh
+!AIWolfStarter.bat
+!lib/aiwolf-starter.jar
